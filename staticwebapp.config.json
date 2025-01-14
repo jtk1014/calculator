@@ -1,9 +1,7 @@
 {
   "routes": [
     {
-      
       "route": "/*",
-      
       "allowedRoles": ["SWAAccess"]
     }
   ],
