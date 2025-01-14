@@ -16,7 +16,7 @@
     "403": {
       
       "statusCode": 403,
-      "rewrite": "/forbidden.html"
+      "rewrite": "/nope.html"
     }
   },
   "auth": {
