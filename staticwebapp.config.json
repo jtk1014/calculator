@@ -1,7 +1,9 @@
 {
   "routes": [
     {
+      
       "route": "/*",
+      
       "allowedRoles": ["SWAAccess"]
     }
   ],
@@ -9,6 +11,10 @@
     "401": {
       "statusCode": 302,
       "redirect": "/.auth/login/aad"
+    },
+    "403": {
+      "rewrite": "/forbidden.html",
+      "statusCode": 403
     }
   },
   "auth": {
@@ -23,4 +29,3 @@
     }
   }
 }
-
