@@ -6,10 +6,7 @@
     }
   ],
   "responseOverrides": {
-    "401": {
-      "statusCode": 302,
-      "redirect": "/.auth/login/aad"
-    },
+    
     "403": {
       "rewrite": "/nope.html",
       "statusCode": 403
