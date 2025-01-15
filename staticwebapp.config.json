@@ -1,8 +1,9 @@
 {
   "routes": [
     {
+      
       "route": "/*",
-      "allowedRoles": ["SWAAccess"]
+      "allowedRoles": ["authenticated"]
     }
   ],
   "responseOverrides": {
@@ -19,6 +20,7 @@
     "identityProviders": {
       "azureActiveDirectory": {
         "registration": {
+          
           "openIdIssuer": "https://login.microsoftonline.com/f33ebe02-e9ba-41ed-829a-cf9ca150c16d/v2.0",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET_APP_SETTING_NAME"
@@ -27,4 +29,3 @@
     }
   }
 }
-
