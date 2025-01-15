@@ -16,12 +16,19 @@
     }
   },
   "auth": {
+    "rolesSource": "/api/GetRoles",
     "identityProviders": {
       "azureActiveDirectory": {
+        "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
         "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/f33ebe02-e9ba-41ed-829a-cf9ca150c16d/v2.0",
+          "openIdIssuer": "https://login.microsoftonline.com/f33ebe02-e9ba-41ed-829a-cf9ca150c16d",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET_APP_SETTING_NAME"
+        },
+        "login": {
+          "loginParameters": [
+            "resource=https://graph.microsoft.com"
+          ]
         }
       }
     }
