@@ -481,18 +481,16 @@
 <body class="light">
 <!-- Sticky Header with absolute-centered Title -->
 <header>
-  <h1>Managed Services Calculator</h1>
+  <h1>Managed Services Calculator (Guided)</h1>
   <div class="header-right">
     <!-- Mode Selector -->
-    <label for="modeSelect" class="font-semibold text-sm">Mode:</label>
-    <select
-      id="modeSelect"
-      class="rounded px-2 py-1 text-sm border border-gray-300"
+    
+    <button
+      class="generic-button text-sm"
+      onclick="window.open('https://orange-stone-06b417710.4.azurestaticapps.net/')"
     >
-      <option value="guided" selected>Guided</option>
-      <option value="ad-hoc">Ad-Hoc</option>
-    </select>
-
+      Switch to Ad-Hoc Calculator
+    </button>
     <!-- Launch Client Discovery Form -->
     <button
       class="generic-button text-sm"
@@ -502,7 +500,7 @@
     </button>
 
     <!-- Dark Mode Toggle -->
-   
+    
   </div>
   <script src="https://kit.fontawesome.com/43a6557885.js" crossorigin="anonymous"></script>
 </header>
