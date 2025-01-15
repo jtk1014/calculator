@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<!-- We toggle a "dark" class on <html> to switch modes -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NTG Guided Calculator - Modernized (Blue Buttons)</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome for Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-papwZCzG8tGHd6E4fWpF+3uGgrN3jdSrtuwEjbwU0szgmfjA8GwgocB07uK8NlmI2wVHgmsGvYVWXaBV9qLkDw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --accent-color: #3b82f6;   /* Blue 500 from Tailwind */
+      --accent-hover: #2563eb;   /* Blue 600 from Tailwind */
+      --secondary-color: rgba(255, 255, 255, 0.25); 
+      --text-color: #111827;
+      --light-text-color: #6b7280;
+      --bg-color: #FFFFFF;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.05);
+      --font-family: 'Inter', sans-serif;
+      --transition: all 0.3s ease;
+      --border-radius: 0.75rem;
+    }
+
+    /* Keep the watermark background from your original code */
+    body {
+      font-family: var(--font-family);
+      margin: 0;
+      color: var(--text-color);
+      line-height: 1.6;
+      background-color: #fafafa;
+      background-image: url('https://raw.githubusercontent.com/jtk1014/calcV3/main/watermark2.png');
+      background-position: left 1%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 40% auto;
+      transition: background-color 0.5s;
+    }
+
+    /* Sticky header with partial glass effect and absolutely centered title */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: relative;
+    }
+
+    /* Title absolutely centered horizontally */
+    h1 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: var(--accent-color);
+      margin: 0;
+      /* Slight glow effect for the text */
+      text-shadow: 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    /* Header right-side container */
+    .header-right {
+      margin-left: auto; /* pushes right-side items to the far right */
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Glass-like cards */
+    .card {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: var(--border-radius);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+      transition: var(--transition);
+    }
+    .card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      transform: translateY(-1px);
+    }
+    .card-header {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.625rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-color);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Generic button with a subtle glow in blue */
+    .generic-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      background-color: var(--accent-color);
+      border: none;
+      border-radius: 3rem;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 0 8px rgba(59,130,246, 0.25);
+    }
+    .generic-button:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 0 0 12px rgba(37,99,235, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Input grids, fields */
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.25rem;
+    }
+    
+    .input-field label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .explanation {
+      font-size: 0.8rem;
+      color: var(--light-text-color);
+      margin-top: 0.25rem;
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    /* Tables with subtle transparency */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.25rem;
+      font-size: 0.95rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      background-color: rgba(255,255,255,0.9);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    table th,
+    table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      text-align: left;
+      vertical-align: middle;
+      color: var(--text-color);
+    }
+    table th {
+      background-color: rgba(0,0,0,0.05);
+      font-weight: 700;
+    }
+    .locked-item td {
+      opacity: 0.7;
+      background: rgba(0,0,0,0.02);
+    }
+    .override-input {
+      width: 80px;
+      font-size: 0.9rem;
+      padding: 0.375rem;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 0.25rem;
+      background: #fff;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+    .override-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    /* Slider styling */
+    .slider-container input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      transition: 0.3s;
+      background: linear-gradient(to right, var(--accent-color) 0%, var(--accent-hover) 100%);
+      margin-top: 0.5rem;
+    }
+    .slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border: 2px solid var(--accent-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .slider-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 0.3rem;
+    }
+    .pricing-guidance {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* Output section */
+    #output-section {
+      margin-top: 2.5rem;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .section-title {
+      margin-top: 1.25rem;
+      margin-bottom: 0.625rem;
+      font-weight: 700;
+      font-size: 1.4rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+    .internal-section {
+      margin-top: 2.5rem;
+      background: rgba(255,255,255,0.4);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 1.25rem;
+    }
+
+    /* Package tiles (glass-like) */
+    .package-tiles,
+    .labor-model-tiles,
+    .helpdesk-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 0.625rem;
+    }
+    .package-tile,
+    .labor-tile,
+    .helpdesk-tile {
+      flex: 1 1 300px;
+      background: rgba(255,255,255,0.6);
+      border: 2px solid rgba(0,0,0,0.06);
+      border-radius: var(--border-radius);
+      padding: 1.25rem;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .package-tile:hover,
+    .labor-tile:hover,
+    .helpdesk-tile:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+    .package-tile.selected,
+    .labor-tile.selected,
+    .helpdesk-tile.selected {
+      border-color: var(--accent-color);
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 8px 30px rgba(59,130,246,0.15);
+    }
+
+    /* "Recommended" badge in the top-right corner with matching corner radius */
+    .recommended-badge {
+      background: var(--accent-color);
+      color: #fff;
+      text-align: center;
+      padding: 0.25rem 0.5rem;
+      border-top-right-radius: var(--border-radius);
+      /* If you want a full radius on the other corners, remove these two lines */
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      
+      animation: bob 2s infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    /* Logo container */
+    .logo-upload-container {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #clientLogoPreview {
+      max-width: 200px;
+      margin-top: 0.9375rem;
+      display: block;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--border-radius);
+      padding: 0.3125rem;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    #logoDropZone {
+      background: rgba(255,255,255,0.6);
+      border: 2px dashed rgba(0,0,0,0.1);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+    #logoDropZone:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: var(--accent-color);
+    }
+
+    .warning-text {
+      color: #b91c1c;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Floating Pod (versions) with subtle glass effect */
+    #versionsPod {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+      padding: 1.5rem;
+      z-index: 2000;
+      display: none;
+    }
+    #togglePodBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      border: none;
+      border-radius: 9999px;
+      background: var(--accent-color);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    #togglePodBtn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Stepper Buttons - Cleaned Up */
+    .stepper-container {
+      display: inline-flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      overflow: hidden;
+    }
+    .stepper-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-size: 1rem;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .stepper-btn:hover {
+      background: var(--hover-bg);
+    }
+    .stepper-input {
+      width: 3rem;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    /* Dark Mode overrides – if you still want it, we keep it */
+    .dark body {
+      background-color: #1a202c;
+      background-image: none; /* or remove watermark in dark mode */
+    }
+    .dark header {
+      background-color: rgba(26,32,44,0.8);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .dark .card {
+      background: rgba(26,32,44,0.8);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .dark #output-section {
+      background: rgba(26,32,44,0.8);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .dark .package-tile,
+    .dark .labor-tile,
+    .dark .helpdesk-tile {
+      background: rgba(26,32,44,0.8);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .dark .package-tile.selected,
+    .dark .labor-tile.selected,
+    .dark .helpdesk-tile.selected {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--accent-color);
+    }
+    .dark #logoDropZone {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .dark #clientLogoPreview {
+      background-color: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .dark #versionsPod {
+      background: rgba(26,32,44,0.9);
+      border-color: rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+
+<body class="light">
+<!-- Sticky Header with absolute-centered Title -->
+<header>
+  <h1>Managed Services Calculator</h1>
+  <div class="header-right">
+    <!-- Mode Selector -->
+    <label for="modeSelect" class="font-semibold text-sm">Mode:</label>
+    <select
+      id="modeSelect"
+      class="rounded px-2 py-1 text-sm border border-gray-300"
+    >
+      <option value="guided" selected>Guided</option>
+      <option value="ad-hoc">Ad-Hoc</option>
+    </select>
+
+    <!-- Launch Client Discovery Form -->
+    <button
+      class="generic-button text-sm"
+      onclick="window.open('https://forms.microsoft.com/Pages/ShareFormPage.aspx?id=Ar4-87rp7UGCms-coVDBbV4HZGJX5bpGj4K5YdTyi6BUNU5QVUc1TTM2RFdEUUNWUEM3NVcwNFc4RCQlQCN0PWcu&sharetoken=lu5qDcn5TJjVmyXT7Nxg')"
+    >
+      <i class="fas fa-link"></i> Launch Discovery
+    </button>
+
+    <!-- Dark Mode Toggle -->
+    <button
+      class="generic-button text-sm"
+      onclick="toggleDarkMode()"
+    >
+      <i class="fas fa-moon"></i> Toggle Dark
+    </button>
+  </div>
+  <script src="https://kit.fontawesome.com/43a6557885.js" crossorigin="anonymous"></script>
+</header>
+
+<main>
+  <!-- ============== ENVIRONMENT DETAILS ============== -->
+  <div id="environment-details" class="card">
+    <div class="card-header">
+      <span><i class="fas fa-network-wired fa-icon"></i> Environment Details</span>
+      <span class="info-icon" title="Basic info for the environment."><i class="fas fa-info-circle"></i></span>
+    </div>
+    <div class="input-grid">
+      <!-- Workstations -->
+      <div class="input-field">
+        <label>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-desktop fa-icon"></i>
+            Number of Workstations
+            <span class="relative group inline-block cursor-pointer text-[var(--accent-color)]">
+              <i class="fa-solid fa-circle-question"></i>
+              <div
+                class="opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition bg-black text-white text-xs rounded py-1 px-2
+                       absolute z-10 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
+                style="min-width: 150px;"
+              >
+                Affects workstation & endpoint-based vendor costs.
+              </div>
+            </span>
+          </span>
+        </label>
+        <div class="stepper-container">
+          <button class="stepper-btn" onclick="changeValue('workstations', -1)">-</button>
+          <input
+            type="text"
+            id="workstations"
+            class="stepper-input"
+            value="0"
+          >
+          <button class="stepper-btn" onclick="changeValue('workstations', 1)">+</button>
+        </div>
+        <div class="explanation">Affects costs per workstation (EDR, backups, etc.).</div>
+      </div>
+
+      <!-- Servers -->
+      <div class="input-field">
+        <label>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-server fa-icon"></i> Number of Servers
+            <span class="relative group inline-block cursor-pointer text-[var(--accent-color)]">
+              <i class="fa-solid fa-circle-question"></i>
+              <div
+                class="opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition bg-black text-white text-xs rounded py-1 px-2
+                       absolute z-10 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
+                style="min-width: 150px;"
+              >
+                Server count also affects endpoint-based vendor costs.
+              </div>
+            </span>
+          </span>
+        </label>
+        <div class="stepper-container">
+          <button class="stepper-btn" onclick="changeValue('servers', -1)">-</button>
+          <input
+            type="text"
+            id="servers"
+            class="stepper-input"
+            value="0"
+          >
+          <button class="stepper-btn" onclick="changeValue('servers', 1)">+</button>
+        </div>
+        <div class="explanation">Include VMs.</div>
+      </div>
+
+      <!-- Users -->
+      <div class="input-field">
+        <label>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-user-friends fa-icon"></i> Number of Users
+            <span class="relative group inline-block cursor-pointer text-[var(--accent-color)]">
+              <i class="fa-solid fa-circle-question"></i>
+              <div
+                class="opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition bg-black text-white text-xs rounded py-1 px-2
+                       absolute z-10 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
+                style="min-width: 150px;"
+              >
+                Affects per-user services (Email Security, SAT, M365).
+              </div>
+            </span>
+          </span>
+        </label>
+        <div class="stepper-container">
+          <button class="stepper-btn" onclick="changeValue('users', -1)">-</button>
+          <input
+            type="text"
+            id="users"
+            class="stepper-input"
+            value="0"
+          >
+          <button class="stepper-btn" onclick="changeValue('users', 1)">+</button>
+        </div>
+        <div class="explanation">Affects user-based costs.</div>
+      </div>
+
+      <!-- Locations -->
+      <div class="input-field">
+        <label>
+          <span class="flex items-center gap-1">
+            <i class="fas fa-building fa-icon"></i> Number of Locations
+            <span class="relative group inline-block cursor-pointer text-[var(--accent-color)]">
+              <i class="fa-solid fa-circle-question"></i>
+              <div
+                class="opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition bg-black text-white text-xs rounded py-1 px-2
+                       absolute z-10 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
+                style="min-width: 150px;"
+              >
+                Impacts location-based items (firewalls).
+              </div>
+            </span>
+          </span>
+        </label>
+        <div class="stepper-container">
+          <button class="stepper-btn" onclick="changeValue('locations', -1)">-</button>
+          <input
+            type="text"
+            id="locations"
+            class="stepper-input"
+            value="0"
+          >
+          <button class="stepper-btn" onclick="changeValue('locations', 1)">+</button>
+        </div>
+        <div class="explanation">For location-based items like WatchGuard.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== PACKAGE SELECTION TILES ============== -->
+  <div class="card">
+    <div class="card-header">
+      <span><i class="fas fa-box-open fa-icon"></i> Select a Package</span>
+      <span class="info-icon" title="Pre-select core services."><i class="fas fa-info-circle"></i></span>
+    </div>
+    <p class="explanation">Choose from our pre-built packages or build your own.</p>
+  
+    <div class="package-tiles">
+      <!-- Tile 1: Essential -->
+      <div class="package-tile" id="tile-essential" data-package="essential">
+        <h3 class="text-xl font-bold">Essential</h3>
+        <p class="text-sm font-normal">
+          Core security & backup services.
+        </p>
+      </div>
+  
+      <!-- Tile 2: Premium + "Recommended" Badge -->
+      <div class="package-tile relative" id="tile-premium" data-package="premium">
+        <div
+          class="absolute top-0 right-0 text-white text-xs font-semibold recommended-badge"
+        >
+          Recommended
+        </div>
+        <h3 class="text-xl font-bold">Premium</h3>
+        <p class="text-sm font-normal">
+          Includes Managed Threat Protection, Security Awareness Training,
+          and M365 Backup.
+        </p>
+      </div>
+  
+      <!-- Tile 3: Custom -->
+      <div class="package-tile" id="tile-custom" data-package="custom">
+        <h3 class="text-xl font-bold">Build Your Own</h3>
+        <p class="text-sm font-normal">
+          Customize exactly what you need.
+        </p>
+      </div>
+    </div>
+  
+    <select id="package" class="hidden">
+      <option value="">--Please choose an option--</option>
+      <option value="essential">NerdAssure Essential</option>
+      <option value="premium">NerdAssure Premium</option>
+      <option value="custom">Build Your Own</option>
+    </select>
+  </div>
+
+  <!-- ============== LINE ITEMS (CORE & OPTIONAL SERVICES) ============== -->
+  <div id="line-items" class="card">
+    <div class="card-header">
+      <span><i class="fas fa-tasks fa-icon"></i> Core & Optional Services</span>
+      <span class="info-icon" title="Pre-select core services."><i class="fas fa-info-circle"></i></span>
+    </div>
+    <p class="explanation">
+      All costs shown are based on official recommended vendors. You can override costs
+      if using a different vendor/cost structure.
+    </p>
+    <div class="overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Include</th>
+            <th>Service</th>
+            <th>Recommended Vendor</th>
+            <th>Your Cost</th>
+            <th>Override Cost</th>
+            <th>Cost Basis</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="locked-item">
+            <td><input type="checkbox" data-cogs="6" data-type="endpoint" class="line-item" checked disabled></td>
+            <td>RMM (Remote Monitoring & Management)</td>
+            <td>ConnectWise RMM (Required)</td>
+            <td>$6.00</td>
+            <td>N/A</td>
+            <td>Per Endpoint</td>
+            <td>Always included. Endpoints = Workstations + Servers</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-cogs="2.4" data-type="endpoint" class="line-item" checked disabled></td>
+            <td>EDR (Endpoint Security)</td>
+            <td>Threatdown by Malwarebytes</td>
+            <td>$2.40</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="2.4"></td>
+            <td>Per Endpoint</td>
+            <td>Always included to ensure endpoint protection.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-cogs="3.25" data-type="endpoint" class="line-item" id="mdr-item"></td>
+            <td>MDR (Managed Threat Detection & Response)</td>
+            <td>Threatdown by Malwarebytes</td>
+            <td>$3.25</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="3.25"></td>
+            <td>Per Endpoint</td>
+            <td>Requires EDR.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-type="workstation" class="line-item"></td>
+            <td>Backup for Workstations</td>
+            <td>Axcient x360 Recover</td>
+            <td>$8.50</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="8.5"></td>
+            <td>Per Workstation</td>
+            <td>Protect workstation data.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-type="server" class="line-item"></td>
+            <td>Backup for Servers</td>
+            <td>Axcient x360 Recover</td>
+            <td>$35.00</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="35"></td>
+            <td>Per Server</td>
+            <td>Protect server data.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-type="user" class="line-item"></td>
+            <td>Email Security</td>
+            <td>Ironscales Email Protect</td>
+            <td>$2.80</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="2.80"></td>
+            <td>Per User</td>
+            <td>Email threat protection.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-type="user" class="line-item"></td>
+            <td>Security Awareness Training</td>
+            <td>Ironscales Phishing Simulation & Training</td>
+            <td>$0.70</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="0.70"></td>
+            <td>Per User</td>
+            <td>Educate users to recognize threats.</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" data-type="user" class="line-item"></td>
+            <td>Productivity Suite Backup</td>
+            <td>Axcient x360 Cloud</td>
+            <td>$1.60</td>
+            <td><input type="number" step="0.01" class="override-input cogs-override" data-default="1.60"></td>
+            <td>Per User (Mailbox)</td>
+            <td>Backup for M365 mailboxes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============== ADDITIONAL ITEMS ============== -->
+  <div id="additional-items" class="card">
+    <div class="card-header">
+      <span><i class="fas fa-info-circle"></i> Additional Services</span>
+    </div>
+    <p class="explanation">Add optional firewall and/or Microsoft 365 licensing to your plan if needed.</p>
+    
+    <!-- WatchGuard Firewall Section -->
+    <div class="mt-4">
+      <h4 class="mb-2 font-semibold text-gray-700 flex items-center gap-2">
+        <i class="fa-solid fa-fire-burner"></i> WatchGuard Firewall (Per Location)
+      </h4>
+      <label class="block text-sm font-medium text-gray-700">Select Firewall Model:</label>
+      <select
+        id="watchguard"
+        class="mt-1 w-full text-black rounded-md shadow-sm focus:border-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+      >
+        <option value="">None</option>
+        <option value="25.43">T-25 Basic Security (1-5 Users) Your Cost: $25.43/location</option>
+        <option value="32.64">T-25W Basic Security (1-5 Users, WiFi Built In) Your Cost: $32.64/location</option>
+        <option value="43.55">T-45 Basic Security (6-20 Users) Your Cost: $43.55/location</option>
+        <option value="56.48">T-45W-PoE Basic Security (6-20 Users, WiFi Built In) Your Cost: $56.48/location</option>
+        <option value="80.02">T-85-PoE Basic Security (21-50 Users, WiFi Built In) Your Cost: $80.02/location</option>
+      </select>
+    </div>
+
+    <!-- Microsoft 365 Licensing Section -->
+    <div class="mt-8">
+      <h4 class="mb-2 font-semibold text-gray-700 flex items-center gap-2">
+        <i class="fa-brands fa-microsoft"></i> Microsoft 365 Licensing
+      </h4>
+      <p class="text-sm text-gray-500">Enter the number of seats for each license type (leave 0 if not needed).</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-2">
+        <div>
+          <label class="block text-sm font-medium text-gray-700"># Basic</label>
+          <input
+            type="number"
+            min="0"
+            id="m365Basic"
+            class="mt-1 block w-full text-black rounded-md shadow-sm focus:border-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+            placeholder="0"
+          >
+          <small class="text-gray-400">($6.05/user)</small>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700"># Standard</label>
+          <input
+            type="number"
+            min="0"
+            id="m365Standard"
+            class="mt-1 block w-full text-black rounded-md shadow-sm focus:border-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+            placeholder="0"
+          >
+          <small class="text-gray-400">($12.60/user)</small>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700"># Premium</label>
+          <input
+            type="number"
+            min="0"
+            id="m365Premium"
+            class="mt-1 block w-full text-black rounded-md shadow-sm focus:border-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+            placeholder="0"
+          >
+          <small class="text-gray-400">($22.18/user)</small>
+        </div>
+      </div>
+      <div class="warning-text hidden" id="m365Warning">
+        The total M365 seats cannot exceed total # of users in environment.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== CUSTOM ADDITIONAL SERVICES ============== -->
+  <div id="custom-additional-services" class="card">
+    <div class="card-header">
+      <span><i class="fa-solid fa-plus"></i> Custom Additional Services</span>
+    </div>
+    <p class="explanation">
+      Create your own service entries. For <strong>Pricing Type</strong>:
+      <ul class="list-disc list-inside ml-4">
+        <li><strong>Vendor</strong> means margin applies to this base cost.</li>
+        <li><strong>Flat</strong> means you're specifying the final price (no margin added).</li>
+      </ul>
+      Also select a <strong>Quantity Basis</strong> (like per user or custom quantity), and if needed specify a
+      <strong>custom quantity</strong> in the last column.
+    </p>
+    <!-- Button to add a row -->
+    <button type="button" class="generic-button" id="addCustomServiceBtn">
+      <i class="fas fa-plus"></i>&nbsp; Add Custom Service
+    </button>
+
+    <div class="mt-4">
+      <table id="customServicesTable" class="w-full table-fixed text-sm">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Qty Basis</th>
+            <th>Pricing Type</th>
+            <th>Base Cost / Price</th>
+            <th>Custom Qty</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows appended dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============== LABOR / ON-SITE & REMOTE ============== -->
+  <div id="labor-onsite" class="card">
+    <div class="card-header">
+      <span><i class="fas fa-tools fa-icon"></i> Labor / On-Site & Remote</span>
+    </div>
+    <p class="explanation">
+      Included labor services are added to final monthly price, and are unaffected by margin slider. 
+      If you Outsource HelpDesk, that $40/user is considered vendor cost and margin calculation does apply.
+    </p>
+    <h3 class="mt-6 mb-3"></h3>
+    <div class="input-field">
+      <h3 class="mb-1 font-semibold text-gray-700">Set Your Hourly Labor Rate:</h3>
+      <input type="number" id="hourlyRate" step="0.01" min="0" placeholder="e.g. 179"
+             class="override-input w-36">
+      <div class="explanation">
+        If All Labor is Billable, show e.g. "All Labor Billable @ $179/hr" to the client.
+      </div>
+    </div>
+    <h3 class="mb-1 font-semibold text-gray-700">Select a Labor Model</h3>
+    <div class="labor-model-tiles">
+      <div class="labor-tile" id="tile-all-billable" data-labor="allBillable">
+        <h4>All Labor Billable</h4>
+      </div>
+      <div class="labor-tile" id="tile-remote-included" data-labor="remoteIncluded">
+        <h4>Remote Support Included, Onsite Billable (Recommended)</h4>
+      </div>
+    </div>
+
+    <!-- HelpDesk Options -->
+    <div id="helpdesk-options-section" class="hidden">
+      <h3 class="mt-6 mb-3">How do you plan to handle HelpDesk (user support requests)?</h3>
+      <div class="helpdesk-tiles">
+        <div class="helpdesk-tile" id="tile-outsourced-helpdesk" data-helpdesk="outsourced">
+          <h4>Outsource HelpDesk</h4>
+          <p>ConnectWise HelpDesk - $40/user (Your cost. Selected vendor services margin will apply)</p>
+        </div>
+        <div class="helpdesk-tile" id="tile-internal-helpdesk" data-helpdesk="internal">
+          <h4>Handle HelpDesk Internally</h4>
+          <p>Enter the estimated hours/user below (ignores margin markup)</p>
+        </div>
+      </div>
+      <div class="input-field hidden">
+        <br>
+        <label for="internalHelpdeskHours">
+          <i class="fas fa-clock fa-icon text-[var(--accent-color)]"></i> Estimated HelpDesk Time per User (Hours/Month):
+        </label>
+        <input type="number" id="internalHelpdeskHours" step="0.1" min="0" value="0.5" class="override-input w-24">
+        <div class="explanation">
+          This is multiplied by your contract rate & user count. Ignores margin calculation.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mt-6 mb-3"></h3>
+    <div class="input-field">
+      <div class="flex items-center space-x-2">
+        <span class="mb-1 font-semibold text-gray-700">
+          Include a Monthly On-Site Visit?
+        </span>
+        <label for="includeOnsiteVisit" class="relative inline-flex items-center cursor-pointer">
+          <input 
+            type="checkbox" 
+            id="includeOnsiteVisit" 
+            class="sr-only peer" 
+          />
+          <div 
+            class="w-11 h-6 bg-gray-300 
+                   peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] 
+                   rounded-full peer 
+                   peer-checked:bg-[var(--accent-color)] 
+                   after:content-[''] after:absolute after:top-[1px] after:left-[1px] 
+                   after:bg-white after:border-white after:border after:rounded-full 
+                   after:h-5 after:w-5 after:transition-all 
+                   peer-checked:after:translate-x-full"
+          ></div>
+        </label>
+      </div>
+    </div>
+    <div class="input-field mt-4 hidden" id="onsiteHoursContainer">
+      <label for="onsiteHours" class="mb-1 font-semibold text-gray-700">
+        <i class="fas fa-clock fa-icon text-[var(--accent-color)]"></i>
+        Estimate Monthly On-Site Visit Hours:
+      </label>
+      <input 
+        type="number" 
+        id="onsiteHours" 
+        min="0" 
+        value="2" 
+        class="override-input w-24"
+      />
+      <div class="explanation mt-1">
+        Factored into total price based on your contract rate above.
+        Ignores margin calculation.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== TARGET MARGIN SLIDER ============== -->
+  <div class="card">
+    <div class="card-header">
+      <span>Set Your Target Margin (Vendor Services)</span>
+    </div>
+    <p class="explanation">
+      The margin set here applies to vendor costs, including Outsourced HelpDesk if selected.
+    </p>
+    <div class="slider-container">
+      <label for="marginSlider">Target Margin (%)</label>
+      <input type="range" id="marginSlider" min="0" max="100" value="60">
+      <div class="slider-value" id="marginValue">60%</div>
+    </div>
+    <div class="pricing-guidance" id="pricing-guidance"></div>
+  </div>
+
+  <!-- ============== LOGO UPLOAD ============== -->
+  <div class="card">
+    <div class="card-header">
+      <span><i class="fas fa-image fa-icon"></i> Client Logo (Optional)</span>
+      <span class="info-icon" title="Upload or drag and drop a client logo."><i class="fas fa-info-circle"></i></span>
+    </div>
+    <div class="logo-upload-container">
+      <div
+        id="logoDropZone"
+        class="flex flex-col items-center justify-center w-full p-4 mt-2 cursor-pointer"
+      >
+        <p class="text-sm mb-2">
+          Drag & drop logo here, or click to select
+        </p>
+        <i class="fas fa-cloud-upload-alt text-3xl"></i>
+        <input
+          type="file"
+          id="clientLogoInput"
+          accept="image/*"
+          class="hidden" 
+        >
+      </div>
+      <small class="mt-2 text-xs">
+        PNG with transparent background works best (around 600px wide recommended)
+      </small>
+      <img
+        id="clientLogoPreview"
+        alt="Client Logo Preview"
+        class="hidden mt-4 max-w-xs"
+      >
+    </div>
+  </div>
+
+  <!-- ============== GENERATE & DOWNLOAD BUTTONS ============== -->
+  <div class="flex flex-wrap justify-center mt-8 space-x-4">
+    <button type="button" class="generic-button" id="generate-output-btn">
+      <i class="fas fa-file-alt"></i>&nbsp; Generate Client Facing Plan & Cost Breakdown
+    </button>
+    <button class="generic-button" id="captureAndDownload">
+      <i class="fas fa-download"></i>&nbsp; Download Proposal as PDF
+    </button>
+  </div>
+
+  <!-- ============== OUTPUT SECTION ============== -->
+  <div id="output-section"></div>
+</main>
+
+<!-- ============== TOGGLE POD BUTTON ============== -->
+<button id="togglePodBtn">
+  <i class="fa-solid fa-floppy-disk"></i> Save / Load
+</button>
+
+<!-- ============== FLOATING VERSIONS POD ============== -->
+<div id="versionsPod">
+  <h3 class="text-lg font-semibold flex items-center gap-2 mb-2">
+    <i class="fas fa-database"></i> Save Your Progress
+  </h3>
+  <br>
+  <div class="input-field">
+    <label for="versionName">Enter Version Name:</label>
+    <input type="text" id="versionName" placeholder="e.g. Client_X_Proposal_v1" class="override-input w-full">
+    <b class="explanation">Use a descriptive name for each saved state.</b>
+  </div>
+
+  <div class="flex flex-col gap-2 mt-2">
+    <button class="generic-button" id="saveCalcBtn">
+      <i class="fas fa-save"></i> Save Current State
+    </button>
+    <div class="flex items-center gap-2">
+      <label for="versionSelect" class="font-semibold">Load Version:</label>
+      <select id="versionSelect" class="text-black px-2 py-1 flex-grow rounded">
+        <option value="">--Select--</option>
+      </select>
+    </div>
+    <button class="generic-button" id="loadCalcBtn">
+      <i class="fas fa-upload"></i> Load Selected
+    </button>
+    <p class="text-xs mt-2">NOTE: Clearing Browser cache will wipe version history.</p>
+  </div>
+</div>
+
+<!-- ====================== SCRIPTS ====================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+  // Dark Mode Toggle
+  function toggleDarkMode() {
+    const htmlClassList = document.documentElement.classList;
+    if (htmlClassList.contains('light')) {
+      htmlClassList.remove('light');
+      htmlClassList.add('dark');
+    } else {
+      htmlClassList.remove('dark');
+      htmlClassList.add('light');
+    }
+  }
+</script>
+<script>
+  // =========== STEP QUANTITY =============
+  function changeValue(id, delta) {
+    const input = document.getElementById(id);
+    let val = parseInt(input.value) || 0;
+    val += delta;
+    if (val < 0) val = 0; 
+    input.value = val;
+  }
+</script>
+<script>
+  // Prevent negative input for normal <input type="number"> fields
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', () => {
+      if (parseFloat(input.value) < 0) {
+        input.setCustomValidity("Value must be positive.");
+        input.reportValidity();
+      } else {
+        input.setCustomValidity("");
+      }
+    });
+  });
+
+  // Mode switch
+  document.getElementById('modeSelect').addEventListener('change', (event) => {
+    if (event.target.value === 'ad-hoc') {
+      window.location.href = 'ad-hoc.html'; // adjust as needed
+    } else {
+      window.location.href = 'guided.html'; // adjust as needed
+    }
+  });
+</script>
+<script>
+  let clientLogoDataURL = null;
+
+  const clientLogoInput = document.getElementById('clientLogoInput');
+  const clientLogoPreview = document.getElementById('clientLogoPreview');
+
+  clientLogoInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        clientLogoDataURL = evt.target.result;
+        clientLogoPreview.src = clientLogoDataURL;
+        clientLogoPreview.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  async function trimTransparentPixels(imageDataURL) {
+    const img = new Image();
+    img.src = imageDataURL;
+    await new Promise(resolve => { img.onload = resolve; });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    let top = canvas.height, left = canvas.width, right = 0, bottom = 0;
+
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const idx = (y * canvas.width + x) * 4;
+        const alpha = data[idx + 3];
+        if (alpha > 0) {
+          if (x < left) left = x;
+          if (x > right) right = x;
+          if (y < top) top = y;
+          if (y > bottom) bottom = y;
+        }
+      }
+    }
+
+    if (right === 0 && bottom === 0) {
+      return imageDataURL; // entire image is transparent or empty
+    }
+
+    const trimmedWidth = right - left + 1;
+    const trimmedHeight = bottom - top + 1;
+
+    const trimmedCanvas = document.createElement('canvas');
+    trimmedCanvas.width = trimmedWidth;
+    trimmedCanvas.height = trimmedHeight;
+    const trimmedCtx = trimmedCanvas.getContext('2d');
+    trimmedCtx.putImageData(
+      ctx.getImageData(left, top, trimmedWidth, trimmedHeight),
+      0,
+      0
+    );
+    return trimmedCanvas.toDataURL('image/png');
+  }
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Refs
+    const workstationsInput = document.getElementById('workstations');
+    const serversInput = document.getElementById('servers');
+    const usersInput = document.getElementById('users');
+    const locationsInput = document.getElementById('locations');
+
+    const tileEssential = document.getElementById('tile-essential');
+    const tilePremium = document.getElementById('tile-premium');
+    const tileCustom = document.getElementById('tile-custom');
+    const packageSelect = document.getElementById('package');
+
+    const watchguardSelect = document.getElementById('watchguard');
+    const m365BasicInput = document.getElementById('m365Basic');
+    const m365StandardInput = document.getElementById('m365Standard');
+    const m365PremiumInput = document.getElementById('m365Premium');
+    const m365Warning = document.getElementById('m365Warning');
+
+    const marginSlider = document.getElementById('marginSlider');
+    const marginValue = document.getElementById('marginValue');
+    const pricingGuidance = document.getElementById('pricing-guidance');
+    const generateOutputButton = document.getElementById('generate-output-btn');
+
+    const laborTileAllBillable = document.getElementById('tile-all-billable');
+    const laborTileRemoteIncluded = document.getElementById('tile-remote-included');
+    const hourlyRateInput = document.getElementById('hourlyRate');
+    const helpdeskOptionsSection = document.getElementById('helpdesk-options-section');
+    const helpdeskTileOutsourced = document.getElementById('tile-outsourced-helpdesk');
+    const helpdeskTileInternal = document.getElementById('tile-internal-helpdesk');
+    const internalHelpdeskHoursField = document.getElementById('internalHelpdeskHours').closest('.input-field');
+    const internalHelpdeskHoursInput = document.getElementById('internalHelpdeskHours');
+    const includeOnsiteVisitCheckbox = document.getElementById('includeOnsiteVisit');
+    const onsiteHoursContainer = document.getElementById('onsiteHoursContainer');
+    const onsiteHoursInput = document.getElementById('onsiteHours');
+
+    // Floating pod
+    const togglePodBtn = document.getElementById('togglePodBtn');
+    const versionsPod = document.getElementById('versionsPod');
+    const versionNameInput = document.getElementById('versionName');
+    const saveCalcBtn = document.getElementById('saveCalcBtn');
+    const loadCalcBtn = document.getElementById('loadCalcBtn');
+    const versionSelect = document.getElementById('versionSelect');
+
+    // Custom Services
+    const addCustomServiceBtn = document.getElementById('addCustomServiceBtn');
+    const customServicesTable = document.getElementById('customServicesTable').querySelector('tbody');
+
+    /* Placeholder training resources */
+    const trainingResources = {
+      "RMM (Remote Monitoring & Management)": ["https://example.com/training/edr"],
+      "EDR (Endpoint Security)": ["https://example.com/training/edr"],
+      "MDR (Managed Threat Detection & Response)": ["https://example.com/training/mdr"],
+      "Backup for Workstations": ["https://example.com/training/workstation-backup"],
+      "Backup for Servers": ["https://example.com/training/server-backup"],
+      "Email Security": ["https://example.com/training/email-security"],
+      "Security Awareness Training": ["https://example.com/training/security-awareness"],
+      "Productivity Suite Backup": ["https://example.com/training/prod-suite-backup"],
+      "WatchGuard Firewall": ["https://example.com/training/watchguard"],
+      "Microsoft 365 Basic": ["https://example.com/training/m365-basic"],
+      "Microsoft 365 Standard": ["https://example.com/training/m365-standard"],
+      "Microsoft 365 Premium": ["https://example.com/training/m365-premium"]
+    };
+
+    const packageMapping = {
+      'essential': [
+        "RMM (Remote Monitoring & Management)",
+        "EDR (Endpoint Security)",
+        "Backup for Workstations",
+        "Backup for Servers",
+        "Email Security"
+      ],
+      'premium': [
+        "RMM (Remote Monitoring & Management)",
+        "EDR (Endpoint Security)",
+        "MDR (Managed Threat Detection & Response)",
+        "Backup for Workstations",
+        "Backup for Servers",
+        "Email Security",
+        "Security Awareness Training",
+        "Productivity Suite Backup"
+      ]
+    };
+
+    // Toggle Versions Pod
+    togglePodBtn.addEventListener('click', function() {
+      if (versionsPod.style.display === 'none' || versionsPod.style.display === '') {
+        versionsPod.style.display = 'block';
+      } else {
+        versionsPod.style.display = 'none';
+      }
+    });
+
+    /* ===============================
+       PACKAGE SELECTION
+     =============================== */
+    function clearTileSelections(tiles) {
+      tiles.forEach(tile => tile.classList.remove('selected'));
+    }
+
+    tileEssential.addEventListener('click', () => {
+      clearTileSelections([tileEssential, tilePremium, tileCustom]);
+      tileEssential.classList.add('selected');
+      packageSelect.value = 'essential';
+      applyPackageSelection('essential');
+    });
+    tilePremium.addEventListener('click', () => {
+      clearTileSelections([tileEssential, tilePremium, tileCustom]);
+      tilePremium.classList.add('selected');
+      packageSelect.value = 'premium';
+      applyPackageSelection('premium');
+    });
+    tileCustom.addEventListener('click', () => {
+      clearTileSelections([tileEssential, tilePremium, tileCustom]);
+      tileCustom.classList.add('selected');
+      packageSelect.value = 'custom';
+      applyPackageSelection('custom');
+    });
+
+    function applyPackageSelection(selectedPackage) {
+      document.querySelectorAll('#line-items .line-item:not(:disabled)').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      if (packageMapping[selectedPackage]) {
+        packageMapping[selectedPackage].forEach(item => {
+          document.querySelectorAll('#line-items tbody tr').forEach(row => {
+            if (row.innerText.includes(item)) {
+              const input = row.querySelector('input.line-item:not(:disabled)');
+              if (input) input.checked = true;
+            }
+          });
+        });
+      }
+      updatePricingGuidance();
+    }
+
+    /* ===============================
+       M365 MIX & MATCH
+     =============================== */
+    function clampM365Counts() {
+      const totalUsers = parseInt(usersInput.value) || 0;
+      let bVal = parseInt(m365BasicInput.value) || 0;
+      let sVal = parseInt(m365StandardInput.value) || 0;
+      let pVal = parseInt(m365PremiumInput.value) || 0;
+      const sum = bVal + sVal + pVal;
+      if (sum > totalUsers) {
+        m365Warning.classList.remove('hidden');
+      } else {
+        m365Warning.classList.add('hidden');
+      }
+    }
+
+    [m365BasicInput, m365StandardInput, m365PremiumInput, usersInput].forEach(el => {
+      el.addEventListener('input', () => {
+        clampM365Counts();
+        updatePricingGuidance();
+      });
+    });
+
+    /* ===============================
+       CREATE CUSTOM SERVICE ROW
+     =============================== */
+    function createCustomServiceRow() {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>
+          <input type="text" class="custom-service-title override-input w-full" placeholder="Custom Service Title">
+        </td>
+        <td>
+          <select class="custom-service-basis override-input w-full">
+            <option value="endpoint">Per Endpoint</option>
+            <option value="workstation">Per Workstation</option>
+            <option value="server">Per Server</option>
+            <option value="user">Per User</option>
+            <option value="location">Per Location</option>
+            <option value="custom">Custom Quantity</option>
+          </select>
+        </td>
+        <td>
+          <select class="custom-service-pricing-type override-input w-full">
+            <option value="monthlyVendor">Monthly Vendor Cost (Margin Applies)</option>
+            <option value="monthlyFlat">Monthly Flat Price (No Margin)</option>
+            <option value="oneTimeVendor">One-Time Vendor Cost (Margin Applies)</option>
+            <option value="oneTimeFlat">One-Time Flat Price (No Margin)</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" step="0.01" min="0" class="custom-service-cost override-input w-full" placeholder="0.00">
+        </td>
+        <td>
+          <input type="number" step="1" min="0" class="custom-service-qty override-input w-full" placeholder="0" disabled>
+        </td>
+        <td>
+          <button type="button" class="text-red-500 hover:text-red-700 transition">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      `;
+      const basisEl = row.querySelector('.custom-service-basis');
+      const pricingTypeEl = row.querySelector('.custom-service-pricing-type');
+      const costEl = row.querySelector('.custom-service-cost');
+      const qtyEl = row.querySelector('.custom-service-qty');
+      const removeBtn = row.querySelector('button');
+
+      basisEl.addEventListener('change', () => {
+        if (basisEl.value === 'custom') {
+          qtyEl.disabled = false;
+        } else {
+          qtyEl.disabled = true;
+          qtyEl.value = '';
+        }
+        updatePricingGuidance();
+      });
+      [basisEl, pricingTypeEl, costEl, qtyEl].forEach(el => {
+        el.addEventListener('input', () => updatePricingGuidance());
+      });
+      removeBtn.addEventListener('click', () => {
+        row.remove();
+        updatePricingGuidance();
+      });
+
+      return row;
+    }
+
+    addCustomServiceBtn.addEventListener('click', () => {
+      const newRow = createCustomServiceRow();
+      customServicesTable.appendChild(newRow);
+    });
+
+    /* ===============================
+       Calculate Totals for Custom Services
+     =============================== */
+    function getCustomServiceTotals() {
+      const wks = parseInt(workstationsInput.value) || 0;
+      const srv = parseInt(serversInput.value) || 0;
+      const usr = parseInt(usersInput.value) || 0;
+      const loc = parseInt(locationsInput.value) || 0;
+
+      let monthlyVendorCost = 0;
+      let monthlyFlatPrice = 0;
+      let oneTimeVendorCost = 0;
+      let oneTimeFlatPrice = 0;
+
+      customServicesTable.querySelectorAll('tr').forEach(row => {
+        const basis = row.querySelector('.custom-service-basis').value;
+        const pricingType = row.querySelector('.custom-service-pricing-type').value;
+        const costVal = parseFloat(row.querySelector('.custom-service-cost').value) || 0;
+
+        let qty = 1;
+        if (basis === 'endpoint') {
+          qty = wks + srv;
+        } else if (basis === 'workstation') {
+          qty = wks;
+        } else if (basis === 'server') {
+          qty = srv;
+        } else if (basis === 'user') {
+          qty = usr;
+        } else if (basis === 'location') {
+          qty = loc;
+        } else if (basis === 'custom') {
+          qty = parseInt(row.querySelector('.custom-service-qty').value) || 0;
+        }
+
+        const total = costVal * qty;
+
+        if (pricingType === 'monthlyVendor') {
+          monthlyVendorCost += total;
+        } else if (pricingType === 'monthlyFlat') {
+          monthlyFlatPrice += total;
+        } else if (pricingType === 'oneTimeVendor') {
+          oneTimeVendorCost += total;
+        } else if (pricingType === 'oneTimeFlat') {
+          oneTimeFlatPrice += total;
+        }
+      });
+
+      return { monthlyVendorCost, monthlyFlatPrice, oneTimeVendorCost, oneTimeFlatPrice };
+    }
+
+    /* ===============================
+       VENDOR COGS (Standard line items)
+     =============================== */
+    function getLineItemCOGS(checkbox) {
+      const row = checkbox.closest('tr');
+      const defaultCogsText = row.querySelector('td:nth-child(4)').innerText.replace('$','');
+      const defaultCogs = parseFloat(defaultCogsText) || 0;
+      const overrideInput = row.querySelector('.override-input');
+      let finalCogs = defaultCogs;
+      if (overrideInput && overrideInput.value) {
+        const overrideVal = parseFloat(overrideInput.value);
+        if (overrideVal >= 0) {
+          finalCogs = overrideVal;
+        }
+      }
+      return finalCogs;
+    }
+
+    function calculateBaseVendorCOGS() {
+      const wks = parseInt(workstationsInput.value) || 0;
+      const srv = parseInt(serversInput.value) || 0;
+      const usr = parseInt(usersInput.value) || 0;
+      const loc = parseInt(locationsInput.value) || 0;
+
+      let monthlyVendorCost = 0;
+      document.querySelectorAll('.line-item:checked').forEach(checkbox => {
+        const type = checkbox.dataset.type;
+        let qty = 1;
+        if (type === 'endpoint') {
+          qty = wks + srv;
+        } else if (type === 'workstation') {
+          qty = wks;
+        } else if (type === 'server') {
+          qty = srv;
+        } else if (type === 'user') {
+          qty = usr;
+        } else if (type === 'location') {
+          qty = loc;
+        }
+        monthlyVendorCost += getLineItemCOGS(checkbox) * qty;
+      });
+
+      const watchVal = parseFloat(watchguardSelect.value) || 0;
+      if (watchVal > 0 && loc > 0) {
+        monthlyVendorCost += watchVal * loc;
+      }
+
+      const bVal = parseInt(m365BasicInput.value) || 0;
+      const sVal = parseInt(m365StandardInput.value) || 0;
+      const pVal = parseInt(m365PremiumInput.value) || 0;
+      const m365BasicPrice = 6.05;
+      const m365StandardPrice = 12.60;
+      const m365PremiumPrice = 22.18;
+
+      monthlyVendorCost += (bVal * m365BasicPrice);
+      monthlyVendorCost += (sVal * m365StandardPrice);
+      monthlyVendorCost += (pVal * m365PremiumPrice);
+
+      return monthlyVendorCost;
+    }
+
+    function calculateVendorCOGS() {
+      let standardMonthlyVendor = calculateBaseVendorCOGS();
+
+      const laborModel = getLaborModel();
+      const helpdeskOpt = getHelpdeskOption();
+      const usr = parseInt(usersInput.value) || 0;
+      if (laborModel === 'remoteIncluded' && helpdeskOpt === 'outsourced') {
+        standardMonthlyVendor += (40 * usr);
+      }
+
+      const {
+        monthlyVendorCost,
+        monthlyFlatPrice,
+        oneTimeVendorCost,
+        oneTimeFlatPrice
+      } = getCustomServiceTotals();
+
+      return {
+        monthlyVendor: standardMonthlyVendor + monthlyVendorCost,
+        monthlyFlat: monthlyFlatPrice,
+        oneTimeVendor: oneTimeVendorCost,
+        oneTimeFlat: oneTimeFlatPrice
+      };
+    }
+
+    /* ===============================
+       LABOR COSTS (NO MARGIN)
+     =============================== */
+    function clearLaborTiles() {
+      laborTileAllBillable.classList.remove('selected');
+      laborTileRemoteIncluded.classList.remove('selected');
+    }
+    laborTileAllBillable.addEventListener('click', () => {
+      clearLaborTiles();
+      laborTileAllBillable.classList.add('selected');
+      updateLaborVisibility();
+      updatePricingGuidance();
+    });
+    laborTileRemoteIncluded.addEventListener('click', () => {
+      clearLaborTiles();
+      laborTileRemoteIncluded.classList.add('selected');
+      updateLaborVisibility();
+      updatePricingGuidance();
+    });
+
+    helpdeskTileOutsourced.addEventListener('click', () => {
+      helpdeskTileOutsourced.classList.add('selected');
+      helpdeskTileInternal.classList.remove('selected');
+      updateLaborVisibility();
+      updatePricingGuidance();
+    });
+    helpdeskTileInternal.addEventListener('click', () => {
+      helpdeskTileInternal.classList.add('selected');
+      helpdeskTileOutsourced.classList.remove('selected');
+      updateLaborVisibility();
+      updatePricingGuidance();
+    });
+    includeOnsiteVisitCheckbox.addEventListener('change', () => {
+      updateLaborVisibility();
+      updatePricingGuidance();
+    });
+
+    function getLaborModel() {
+      if (laborTileAllBillable.classList.contains('selected')) return 'allBillable';
+      if (laborTileRemoteIncluded.classList.contains('selected')) return 'remoteIncluded';
+      return null;
+    }
+    function getHelpdeskOption() {
+      if (helpdeskTileOutsourced.classList.contains('selected')) return 'outsourced';
+      if (helpdeskTileInternal.classList.contains('selected')) return 'internal';
+      return null;
+    }
+
+    function updateLaborVisibility() {
+      const laborModel = getLaborModel();
+      if (laborModel === 'remoteIncluded') {
+        helpdeskOptionsSection.classList.remove('hidden');
+      } else {
+        helpdeskOptionsSection.classList.add('hidden');
+        helpdeskTileOutsourced.classList.remove('selected');
+        helpdeskTileInternal.classList.remove('selected');
+        internalHelpdeskHoursField.classList.add('hidden');
+      }
+
+      if (laborModel === 'remoteIncluded' && helpdeskTileInternal.classList.contains('selected')) {
+        internalHelpdeskHoursField.classList.remove('hidden');
+      } else {
+        internalHelpdeskHoursField.classList.add('hidden');
+      }
+
+      if (includeOnsiteVisitCheckbox.checked) {
+        onsiteHoursContainer.classList.remove('hidden');
+      } else {
+        onsiteHoursContainer.classList.add('hidden');
+      }
+    }
+
+    function calculateAdditionalLaborCost() {
+      const usr = parseInt(usersInput.value) || 0;
+      const rate = parseFloat(hourlyRateInput.value) || 0;
+      let laborCost = 0;
+      const laborModel = getLaborModel();
+      const helpdeskOpt = getHelpdeskOption();
+
+      if (laborModel === 'remoteIncluded') {
+        if (helpdeskOpt === 'internal') {
+          const hrs = parseFloat(internalHelpdeskHoursInput.value) || 0;
+          laborCost += (hrs * usr * rate);
+        }
+      }
+      if (includeOnsiteVisitCheckbox.checked) {
+        const onsiteHrs = parseFloat(onsiteHoursInput.value) || 0;
+        laborCost += onsiteHrs * rate;
+      }
+      return laborCost;
+    }
+
+    /* ===============================
+       MARGIN & PRICE GUIDANCE
+     =============================== */
+    function updatePricingGuidance() {
+      const { monthlyVendor, monthlyFlat, oneTimeVendor, oneTimeFlat } = calculateVendorCOGS();
+      const marginPercent = parseFloat(marginSlider.value) || 0;
+      marginValue.textContent = marginPercent + "%";
+      const marginDecimal = marginPercent / 100;
+
+      let monthlyVendorSale, oneTimeVendorSale;
+      if (marginDecimal < 1) {
+        monthlyVendorSale = monthlyVendor / (1 - marginDecimal);
+        oneTimeVendorSale = oneTimeVendor / (1 - marginDecimal);
+      } else {
+        // If margin is 100% or more, do a simplistic doubling
+        monthlyVendorSale = monthlyVendor * 2;
+        oneTimeVendorSale = oneTimeVendor * 2;
+      }
+
+      const laborCost = calculateAdditionalLaborCost();
+      const monthlyTotal = monthlyVendorSale + monthlyFlat + laborCost;
+      const oneTimeTotal = oneTimeVendorSale + oneTimeFlat;
+
+      // This "pricingGuidance" is just for internal display on the webpage.
+      pricingGuidance.textContent = 
+        `Monthly Vendor: $${monthlyVendor.toFixed(2)} => Sale: $${monthlyVendorSale.toFixed(2)}
+         | One-Time Vendor: $${oneTimeVendor.toFixed(2)} => Sale: $${oneTimeVendorSale.toFixed(2)}
+         | Flat Monthly: $${monthlyFlat.toFixed(2)}
+         | Flat One-Time: $${oneTimeFlat.toFixed(2)}
+         | Labor: $${laborCost.toFixed(2)}
+         => Final Monthly: $${monthlyTotal.toFixed(2)}, One-Time: $${oneTimeTotal.toFixed(2)}`;
+    }
+
+    /* ===============================
+       GENERATE OUTPUT (HTML)
+     =============================== */
+    generateOutputButton.addEventListener('click', () => {
+      const { monthlyVendor, monthlyFlat, oneTimeVendor, oneTimeFlat } = calculateVendorCOGS();
+      const marginPercent = parseFloat(marginSlider.value) || 0;
+      const marginDecimal = marginPercent / 100;
+
+      let monthlyVendorSale, oneTimeVendorSale;
+      if (marginDecimal < 1) {
+        monthlyVendorSale = monthlyVendor / (1 - marginDecimal);
+        oneTimeVendorSale = oneTimeVendor / (1 - marginDecimal);
+      } else {
+        monthlyVendorSale = monthlyVendor * 2;
+        oneTimeVendorSale = oneTimeVendor * 2;
+      }
+
+      const laborCost = calculateAdditionalLaborCost();
+      const finalMonthly = monthlyVendorSale + monthlyFlat + laborCost;
+      const finalOneTime = oneTimeVendorSale + oneTimeFlat;
+
+      const selectedLineItems = [];
+      document.querySelectorAll('.line-item:checked').forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        selectedLineItems.push(row.cells[1].innerText.trim());
+      });
+      if (parseFloat(watchguardSelect.value) || 0 > 0) {
+        selectedLineItems.push("WatchGuard Firewall");
+      }
+      if ((parseInt(m365BasicInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Basic");
+      if ((parseInt(m365StandardInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Standard");
+      if ((parseInt(m365PremiumInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Premium");
+
+      const monthlyItems = [];
+      const oneTimeItems = [];
+      customServicesTable.querySelectorAll('tr').forEach(row => {
+        const serviceTitle = row.querySelector('.custom-service-title').value.trim();
+        if (!serviceTitle) return;
+        const pricingType = row.querySelector('.custom-service-pricing-type').value;
+        if (pricingType === 'monthlyVendor' || pricingType === 'monthlyFlat') {
+          monthlyItems.push(serviceTitle);
+        } else {
+          oneTimeItems.push(serviceTitle);
+        }
+      });
+      monthlyItems.forEach(mi => selectedLineItems.push(mi));
+
+      const laborModel = getLaborModel();
+      const helpdeskOpt = getHelpdeskOption();
+      const rate = parseFloat(hourlyRateInput.value) || 0;
+      const laborBullets = [];
+      if (laborModel === 'allBillable') {
+        laborBullets.push(`All Labor Billable @ $${rate.toFixed(2)}/hr`);
+      } else if (laborModel === 'remoteIncluded') {
+        laborBullets.push("Unlimited Remote Support");
+        laborBullets.push(`On-Site Billable @ $${rate.toFixed(2)}/hr`);
+      }
+      if (includeOnsiteVisitCheckbox.checked) {
+        const onsiteHrs = onsiteHoursInput.value;
+        laborBullets.push(`Monthly On-Site Visit (Estimated ${onsiteHrs} hr${onsiteHrs === "1" ? "" : "s"})`);
+      }
+
+      let clientHTML = 
+        `<div id="client-facing-container" style="color:#333;">
+          <h2 class="text-xl font-bold mb-2">Monthly Services:</h2>
+          <ul class="list-disc list-inside">`;
+      selectedLineItems.forEach(li => {
+        clientHTML += `<li>${li}</li>`;
+      });
+      laborBullets.forEach(lb => {
+        clientHTML += `<li>${lb}</li>`;
+      });
+      clientHTML += `</ul>`;
+      clientHTML += `<p class="mt-2"><strong>Monthly Total:</strong> $${finalMonthly.toFixed(2)}</p>`;
+
+      if (finalOneTime > 0 || oneTimeItems.length > 0) {
+        clientHTML += `
+          <h2 class="text-xl font-bold mt-6 mb-2">One-Time Services:</h2>
+          <ul class="list-disc list-inside">`;
+        oneTimeItems.forEach(oi => {
+          clientHTML += `<li>${oi}</li>`;
+        });
+        clientHTML += `</ul>`;
+        clientHTML += `<p class="mt-2"><strong>One-Time Total:</strong> $${finalOneTime.toFixed(2)}</p>`;
+      }
+      clientHTML += `</div>`;
+
+      let internalHTML = 
+        `<div class="internal-section mt-6">
+          <h3 class="section-title text-lg font-bold mb-4">
+            <i class="fas fa-file-invoice-dollar text-[var(--accent-color)]"></i>
+            COGS & Pricing Breakdown (Not for Client)
+          </h3>
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">Margin Selected</h4>
+              <p class="mt-2 text-xl font-bold">${marginPercent}%</p>
+            </div>
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">Additional Labor</h4>
+              <p class="mt-2 text-xl font-bold">$${laborCost.toFixed(2)}</p>
+            </div>
+          </div>
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">Monthly Vendor Cost</h4>
+              <p class="mt-2 text-xl font-bold">$${monthlyVendor.toFixed(2)}</p>
+              <small>Marked up => $${monthlyVendorSale.toFixed(2)}</small>
+            </div>
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">Monthly Flat Price</h4>
+              <p class="mt-2 text-xl font-bold">$${monthlyFlat.toFixed(2)}</p>
+            </div>
+          </div>
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">One-Time Vendor Cost</h4>
+              <p class="mt-2 text-xl font-bold">$${oneTimeVendor.toFixed(2)}</p>
+              <small>Marked up => $${oneTimeVendorSale.toFixed(2)}</small>
+            </div>
+            <div class="flex-1 bg-white bg-opacity-10 p-4 rounded">
+              <h4 class="text-sm font-semibold">One-Time Flat Price</h4>
+              <p class="mt-2 text-xl font-bold">$${oneTimeFlat.toFixed(2)}</p>
+            </div>
+          </div>
+          <div class="bg-white bg-opacity-10 p-4 rounded">
+            <h4 class="text-sm font-semibold">Final Monthly Price</h4>
+            <p class="mt-2 text-2xl font-extrabold">$${finalMonthly.toFixed(2)}</p>
+            <br>
+            <h4 class="text-sm font-semibold">Final One-Time Price</h4>
+            <p class="mt-2 text-2xl font-extrabold">$${finalOneTime.toFixed(2)}</p>
+          </div>
+        </div>`;
+
+      let trainingSection = 
+        `<div class="internal-section mt-6 bg-opacity-10 p-5 rounded">
+          <h3 class="section-title">Training Materials (For Internal Use)</h3>
+          <p>Links to relevant training resources based on your selected services:</p>
+          <div class="overflow-x-auto mt-4">
+            <table class="w-full text-left" style="background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);">
+              <thead style="background: rgba(255,255,255,0.2);">
+                <tr>
+                  <th class="px-4 py-2">Service</th>
+                  <th class="px-4 py-2">Training Links</th>
+                </tr>
+              </thead>
+              <tbody>`;
+      let foundTraining = false;
+      const allServices = [...selectedLineItems, ...oneTimeItems];
+      allServices.forEach(svc => {
+        if (trainingResources[svc]) {
+          foundTraining = true;
+          trainingSection += `
+            <tr>
+              <td class="px-4 py-2">${svc}</td>
+              <td class="px-4 py-2">
+                ${trainingResources[svc].map(link => `<a href="${link}" target="_blank" style="color: var(--accent-color); text-decoration: underline;">${link}</a>`).join('<br>')}
+              </td>
+            </tr>`;
+        }
+      });
+      if (!foundTraining) {
+        trainingSection += `
+          <tr>
+            <td colspan="2" class="px-4 py-2">No training resources found for these selections.</td>
+          </tr>`;
+      }
+      trainingSection += `
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+
+      const outputSection = document.getElementById('output-section');
+      outputSection.innerHTML = clientHTML + internalHTML + trainingSection;
+
+      document.getElementById('captureAndDownload').addEventListener('click', captureAndDownloadPDF);
+    });
+
+    /* ===============================
+       PDF GENERATION
+     =============================== */
+    async function captureAndDownloadPDF() {
+      // 1) Calculate final monthly, final one-time
+      const { monthlyVendor, monthlyFlat, oneTimeVendor, oneTimeFlat } = calculateVendorCOGS();
+      const marginPercent = parseFloat(marginSlider.value) || 0;
+      const marginDecimal = marginPercent / 100;
+
+      let monthlyVendorSale, oneTimeVendorSale;
+      if (marginDecimal < 1) {
+        monthlyVendorSale = monthlyVendor / (1 - marginDecimal);
+        oneTimeVendorSale = oneTimeVendor / (1 - marginDecimal);
+      } else {
+        monthlyVendorSale = monthlyVendor * 2;
+        oneTimeVendorSale = oneTimeVendor * 2;
+      }
+
+      const laborCost = calculateAdditionalLaborCost();
+      const finalMonthly = monthlyVendorSale + monthlyFlat + laborCost;
+      const finalOneTime = oneTimeVendorSale + oneTimeFlat;
+
+      // 2) Gather the line items for "Monthly Services" and "One-Time Services"
+      const selectedLineItems = [];
+      document.querySelectorAll('.line-item:checked').forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        selectedLineItems.push(row.cells[1].innerText.trim());
+      });
+      if (parseFloat(watchguardSelect.value) > 0) {
+        selectedLineItems.push("WatchGuard Firewall");
+      }
+      if ((parseInt(m365BasicInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Basic");
+      if ((parseInt(m365StandardInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Standard");
+      if ((parseInt(m365PremiumInput.value) || 0) > 0) selectedLineItems.push("Microsoft 365 Premium");
+
+      const monthlyItems = [];
+      const oneTimeItems = [];
+      customServicesTable.querySelectorAll('tr').forEach(row => {
+        const serviceTitle = row.querySelector('.custom-service-title').value.trim();
+        if (!serviceTitle) return;
+        const pricingType = row.querySelector('.custom-service-pricing-type').value;
+        if (pricingType === 'monthlyVendor' || pricingType === 'monthlyFlat') {
+          monthlyItems.push(serviceTitle);
+        } else {
+          oneTimeItems.push(serviceTitle);
+        }
+      });
+      monthlyItems.forEach(mi => selectedLineItems.push(mi));
+
+      // For optional labor bullet
+      const laborModel = getLaborModel();
+      const helpdeskOpt = getHelpdeskOption();
+      const rate = parseFloat(hourlyRateInput.value) || 0;
+      let laborModelNote = "";
+      if (laborModel === 'allBillable') {
+        laborModelNote = `All Labor Billable @ $${rate.toFixed(2)}/hr`;
+      } else if (laborModel === 'remoteIncluded') {
+        laborModelNote = "Unlimited Remote Support + On-Site Billable";
+      }
+
+      // 3) Create the PDF lines that are client-facing only
+      let pdfTextLines = [];
+
+      // Monthly Services
+      pdfTextLines.push("Monthly Services:");
+      selectedLineItems.forEach(item => {
+        pdfTextLines.push(`• ${item}`);
+      });
+      if (laborModelNote) {
+        pdfTextLines.push(`• ${laborModelNote}`);
+      }
+      if (includeOnsiteVisitCheckbox.checked) {
+        const onsiteHrs = onsiteHoursInput.value;
+        pdfTextLines.push(`• Monthly On-Site Visit (Estimated ${onsiteHrs} hr${onsiteHrs === "1" ? "" : "s"})`);
+      }
+      pdfTextLines.push(`Monthly Total: $${finalMonthly.toFixed(2)}`);
+
+      // One-Time Services
+      if (finalOneTime > 0 || oneTimeItems.length > 0) {
+        pdfTextLines.push("");
+        pdfTextLines.push("One-Time Services:");
+        oneTimeItems.forEach(oi => {
+          pdfTextLines.push(`• ${oi}`);
+        });
+        pdfTextLines.push(`One-Time Total: $${finalOneTime.toFixed(2)}`);
+      }
+
+      // 4) Load your PDF template and draw the lines
+      const templateUrl = "https://raw.githubusercontent.com/jtk1014/calculator/main/Proposal_Template_V4.pdf";
+      const pdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+      const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+      const pages = pdfDoc.getPages();
+      const thirdPage = pages[2];
+      const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+      let x = 72;
+      let y = 675;
+      pdfTextLines.forEach(line => {
+        thirdPage.drawText(line, {
+          x: x,
+          y: y,
+          size: 11,
+          font: helveticaFont,
+          color: PDFLib.rgb(0, 0, 0),
+        });
+        y -= 20; 
+      });
+
+      // 5) If you still want the logo on page 1
+      if (clientLogoDataURL) {
+        const trimmedLogoDataURL = await trimTransparentPixels(clientLogoDataURL);
+        const firstPage = pages[0];
+        const logoImage = await pdfDoc.embedPng(trimmedLogoDataURL);
+        const logoDims = logoImage.scale(1);
+
+        const logoMaxWidth = 200;
+        const logoAspectRatio = logoDims.width / logoDims.height;
+        const logoHeight = logoMaxWidth / logoAspectRatio;
+        const logoX = 65;
+        const logoY = firstPage.getHeight() / 6; 
+
+        firstPage.drawImage(logoImage, {
+          x: logoX,
+          y: logoY,
+          width: logoMaxWidth,
+          height: logoHeight
+        });
+      }
+
+      // 6) Save & download the updated PDF
+      const pdfBytesModified = await pdfDoc.save();
+      const blob = new Blob([pdfBytesModified], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'NerdsToGo_Proposal.pdf';
+      link.click();
+    }
+
+    /* ===============================
+       MULTIPLE VERSIONS SAVE/LOAD
+     =============================== */
+    function populateVersionDropdown() {
+      let allStates = localStorage.getItem('ntgCalcStates');
+      if (!allStates) {
+        allStates = "{}";
+      }
+      const statesObj = JSON.parse(allStates);
+      versionSelect.innerHTML = `<option value="">--Select--</option>`;
+      Object.keys(statesObj).forEach(versionKey => {
+        const opt = document.createElement('option');
+        opt.value = versionKey;
+        opt.textContent = versionKey;
+        versionSelect.appendChild(opt);
+      });
+    }
+
+    function saveCalculatorState() {
+      const versionName = versionNameInput.value.trim();
+      if (!versionName) {
+        alert("Please enter a version name before saving.");
+        return;
+      }
+      let allStates = localStorage.getItem('ntgCalcStates');
+      if (!allStates) {
+        allStates = "{}";
+      }
+      const statesObj = JSON.parse(allStates);
+
+      const customServicesData = [];
+      customServicesTable.querySelectorAll('tr').forEach(row => {
+        const title = row.querySelector('.custom-service-title').value.trim();
+        const basis = row.querySelector('.custom-service-basis').value;
+        const pricingType = row.querySelector('.custom-service-pricing-type').value;
+        const costVal = row.querySelector('.custom-service-cost').value;
+        const qtyVal = row.querySelector('.custom-service-qty').value;
+        customServicesData.push({
+          title,
+          basis,
+          pricingType,
+          costVal,
+          qtyVal
+        });
+      });
+
+      const state = {
+        workstations: workstationsInput.value || "",
+        servers: serversInput.value || "",
+        users: usersInput.value || "",
+        locations: locationsInput.value || "",
+
+        packageValue: packageSelect.value || "",
+        tileEssentialSelected: tileEssential.classList.contains('selected'),
+        tilePremiumSelected: tilePremium.classList.contains('selected'),
+        tileCustomSelected: tileCustom.classList.contains('selected'),
+
+        lineItems: Array.from(document.querySelectorAll('.line-item')).map(chk => {
+          return {
+            serviceName: chk.closest('tr').cells[1].innerText.trim(),
+            checked: chk.checked,
+            disabled: chk.disabled,
+            override: chk.closest('tr').querySelector('.override-input')?.value || ""
+          };
+        }),
+
+        watchguard: watchguardSelect.value || "",
+        m365Basic: m365BasicInput.value || "",
+        m365Standard: m365StandardInput.value || "",
+        m365Premium: m365PremiumInput.value || "",
+
+        customServices: customServicesData,
+
+        margin: marginSlider.value || "60",
+        hourlyRate: hourlyRateInput.value || "",
+        laborAllBillable: laborTileAllBillable.classList.contains('selected'),
+        laborRemoteIncluded: laborTileRemoteIncluded.classList.contains('selected'),
+        helpdeskOutsourced: helpdeskTileOutsourced.classList.contains('selected'),
+        helpdeskInternal: helpdeskTileInternal.classList.contains('selected'),
+        internalHelpdeskHours: internalHelpdeskHoursInput.value || "0.5",
+        includeOnsiteVisit: includeOnsiteVisitCheckbox.checked || false,
+        onsiteHours: onsiteHoursInput.value || "2",
+
+        logoData: clientLogoDataURL || null
+      };
+
+      statesObj[versionName] = state;
+      localStorage.setItem('ntgCalcStates', JSON.stringify(statesObj));
+
+      populateVersionDropdown();
+      alert(`Calculator state saved under version: ${versionName}`);
+    }
+
+    function loadCalculatorState() {
+      const selectedVersion = versionSelect.value;
+      if (!selectedVersion) {
+        alert("Please select a version to load.");
+        return;
+      }
+      let allStates = localStorage.getItem('ntgCalcStates');
+      if (!allStates) {
+        allStates = "{}";
+      }
+      const statesObj = JSON.parse(allStates);
+      const state = statesObj[selectedVersion];
+      if (!state) {
+        alert("Selected version not found in local storage.");
+        return;
+      }
+
+      workstationsInput.value = state.workstations;
+      serversInput.value = state.servers;
+      usersInput.value = state.users;
+      locationsInput.value = state.locations;
+
+      packageSelect.value = state.packageValue;
+      if (state.tileEssentialSelected) tileEssential.classList.add('selected'); else tileEssential.classList.remove('selected');
+      if (state.tilePremiumSelected) tilePremium.classList.add('selected'); else tilePremium.classList.remove('selected');
+      if (state.tileCustomSelected) tileCustom.classList.add('selected'); else tileCustom.classList.remove('selected');
+
+      state.lineItems.forEach(item => {
+        document.querySelectorAll('#line-items tbody tr').forEach(row => {
+          if (row.cells[1].innerText.trim() === item.serviceName) {
+            const chk = row.querySelector('.line-item');
+            if (chk && !chk.disabled) {
+              chk.checked = item.checked;
+            }
+            const overrideEl = row.querySelector('.override-input');
+            if (overrideEl) {
+              overrideEl.value = item.override;
+            }
+          }
+        });
+      });
+
+      watchguardSelect.value = state.watchguard || "";
+      m365BasicInput.value = state.m365Basic || "";
+      m365StandardInput.value = state.m365Standard || "";
+      m365PremiumInput.value = state.m365Premium || "";
+
+      customServicesTable.innerHTML = "";
+      if (state.customServices && Array.isArray(state.customServices)) {
+        state.customServices.forEach(cs => {
+          const row = createCustomServiceRow();
+          customServicesTable.appendChild(row);
+          row.querySelector('.custom-service-title').value = cs.title;
+          row.querySelector('.custom-service-basis').value = cs.basis;
+          row.querySelector('.custom-service-pricing-type').value = cs.pricingType;
+          row.querySelector('.custom-service-cost').value = cs.costVal;
+          const qtyEl = row.querySelector('.custom-service-qty');
+          qtyEl.value = cs.qtyVal;
+          if (cs.basis === 'custom') {
+            qtyEl.disabled = false;
+          }
+        });
+      }
+
+      marginSlider.value = state.margin;
+      marginValue.textContent = marginSlider.value + "%";
+
+      hourlyRateInput.value = state.hourlyRate;
+      if (state.laborAllBillable) laborTileAllBillable.classList.add('selected'); else laborTileAllBillable.classList.remove('selected');
+      if (state.laborRemoteIncluded) laborTileRemoteIncluded.classList.add('selected'); else laborTileRemoteIncluded.classList.remove('selected');
+      if (state.helpdeskOutsourced) helpdeskTileOutsourced.classList.add('selected'); else helpdeskTileOutsourced.classList.remove('selected');
+      if (state.helpdeskInternal) helpdeskTileInternal.classList.add('selected'); else helpdeskTileInternal.classList.remove('selected');
+      internalHelpdeskHoursInput.value = state.internalHelpdeskHours;
+      includeOnsiteVisitCheckbox.checked = state.includeOnsiteVisit;
+      onsiteHoursInput.value = state.onsiteHours;
+
+      if (state.logoData) {
+        clientLogoDataURL = state.logoData;
+        clientLogoPreview.src = clientLogoDataURL;
+        clientLogoPreview.classList.remove('hidden');
+      } else {
+        clientLogoDataURL = null;
+        clientLogoPreview.classList.add('hidden');
+      }
+
+      updateLaborVisibility();
+      updatePricingGuidance();
+      alert(`Version "${selectedVersion}" has been loaded successfully!`);
+    }
+
+    saveCalcBtn.addEventListener('click', saveCalculatorState);
+    loadCalcBtn.addEventListener('click', loadCalculatorState);
+    populateVersionDropdown();
+
+    function attachListeners() {
+      [
+        workstationsInput,
+        serversInput,
+        usersInput,
+        locationsInput,
+        watchguardSelect,
+        m365BasicInput,
+        m365StandardInput,
+        m365PremiumInput,
+        marginSlider,
+        hourlyRateInput,
+        internalHelpdeskHoursInput,
+        onsiteHoursInput
+      ].forEach(el => {
+        el.addEventListener('input', () => {
+          updateLaborVisibility();
+          updatePricingGuidance();
+        });
+      });
+      document.querySelectorAll('.line-item').forEach(chk => {
+        chk.addEventListener('change', () => updatePricingGuidance());
+      });
+      document.querySelectorAll('.cogs-override').forEach(overrideEl => {
+        overrideEl.addEventListener('input', () => updatePricingGuidance());
+      });
+    }
+
+    attachListeners();
+    updateLaborVisibility();
+    updatePricingGuidance();
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Drag & drop logic for the logo
+    var logoDropZone = document.getElementById('logoDropZone');
+    var clientLogoInput = document.getElementById('clientLogoInput');
+    var clientLogoPreview = document.getElementById('clientLogoPreview');
+
+    var dropEvents = ['dragenter', 'dragover', 'dragleave', 'drop'];
+    dropEvents.forEach(evtName => {
+      logoDropZone.addEventListener(evtName, function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+
+    var highlightEvents = ['dragenter', 'dragover'];
+    highlightEvents.forEach(evtName => {
+      logoDropZone.addEventListener(evtName, function() {
+        logoDropZone.style.backgroundColor = 'rgba(255,255,255,0.8)';
+      }, false);
+    });
+
+    var unhighlightEvents = ['dragleave', 'drop'];
+    unhighlightEvents.forEach(evtName => {
+      logoDropZone.addEventListener(evtName, function() {
+        logoDropZone.style.backgroundColor = 'rgba(255,255,255,0.6)';
+      }, false);
+    });
+
+    logoDropZone.addEventListener('drop', function(e) {
+      var dt = e.dataTransfer;
+      var file = dt.files[0];
+      if (file) {
+        handleFile(file);
+      }
+    }, false);
+
+    logoDropZone.addEventListener('click', function() {
+      clientLogoInput.click();
+    }, false);
+
+    function handleFile(file) {
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        clientLogoDataURL = evt.target.result;
+        clientLogoPreview.src = clientLogoDataURL;
+        clientLogoPreview.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+</body>
+</html>
