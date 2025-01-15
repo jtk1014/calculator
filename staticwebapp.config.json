@@ -26,7 +26,8 @@
         },
         "login": {
           "loginParameters": [
-            "resource=https://graph.microsoft.com"
+            "scope=openid",
+            "scope=profile"
           ]
         }
       }
