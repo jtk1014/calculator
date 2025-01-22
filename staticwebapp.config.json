@@ -6,15 +6,15 @@
     },
     {
       
-      "route": "/*",
-      "allowedRoles": ["authenticated"]
+      "route": "/:rest(.*)",
+      "allowedRoles": [ "authenticated" ]
     }
   ],
   "responseOverrides": {
     "401": {
-     
-      "redirect": "/.auth/login/aad?post_login_redirect_uri=/{*rest}",
-      "statusCode": 302
+      "statusCode": 302,
+      
+      "redirect": "/.auth/login/aad?post_login_redirect_uri=/{rest}"
     },
     "403": {
       "rewrite": "/nope.html",
